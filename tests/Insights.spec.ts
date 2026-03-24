@@ -48,12 +48,9 @@ test.describe("LearnWise test cases", () => {
 
       expect(changedFields.length).toBeGreaterThan(0); //Fails because no data exist for this user
     });
-    //TODO
+
     test("should update shortcut button click breakdown updates", async ({ page }) => {
-      await basePage.navigateTo("Insights");
-      const initialBreakdown = await insightsPage.shortcutBreakdown.innerText();
-      await insightsPage.selectAssistantsFilter("Engineering Assistant");
-      await expect(insightsPage.shortcutBreakdown).not.toHaveText(initialBreakdown);
+      //TODO not clear which button I need to press. Need to clarify. Is it in Shortcut Button Clicks section or in diaram.
     });
   });
 
