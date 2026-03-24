@@ -25,7 +25,6 @@ export default defineConfig({
   projects: [
     {
       name: "e2e",
-      testDir: "./tests/",
       retries: 2,
       fullyParallel: true,
     },

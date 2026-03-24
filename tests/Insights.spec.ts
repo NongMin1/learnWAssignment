@@ -17,15 +17,15 @@ test.describe("LearnWise test cases", () => {
     await basePage.navigateTo("Insights");
   });
 
-  test.describe("Postive test cases", () => {
-    test("should apply 'Assistants' and 'Escalated' filters", async ({ page }) => {
+  test.describe("Positive test cases", () => {
+    test("should apply 'Assistants' and 'Escalated' filters", async ({}) => {
       await insightsPage.selectEscalationFilter("Escalated");
       await insightsPage.selectAssistantsFilter("Engineering Assistant");
       await expect(insightsPage.filtersApplied("Escalation: Escalated.")).toBeVisible();
       await expect(insightsPage.filtersApplied("Assistants: Engineering Assistant.")).toBeVisible();
     });
 
-    test("should clear selected filters", async ({ page }) => {
+    test("should clear selected filters", async ({}) => {
       await insightsPage.selectEscalationFilter("Escalated");
       await insightsPage.selectAssistantsFilter("Engineering Assistant");
       await insightsPage.clearAllFilters();
@@ -33,28 +33,21 @@ test.describe("LearnWise test cases", () => {
       await expect(insightsPage.filtersApplied("Assistants: Engineering Assistant.")).toBeHidden();
     });
 
-    test("should update widget data when filter is applied", async ({ page }) => {
+    test.fixme("should update widget data when filter is applied", async ({}) => {
       const before = await insightsPage.captureAllMetrics();
-      console.log("Before state:", before);
-
       await insightsPage.selectEscalationFilter("Escalated");
-
       const after = await insightsPage.captureAllMetrics();
-      console.log("After state:", after);
-
       const changedFields = Object.keys(before).filter((key) => before[key as keyof typeof before] !== after[key as keyof typeof after]);
 
-      console.log("Fields that changed:", changedFields);
-
-      expect(changedFields.length).toBeGreaterThan(0); //Fails because no data exist for this user
+      expect(before.escalated).not.toEqual(after.escalated); //Fails because no data exist for this user
     });
 
-    test("should update shortcut button click breakdown updates", async ({ page }) => {
-      //TODO not clear which button I need to press. Need to clarify. Is it in Shortcut Button Clicks section or in diaram.
+    test.fixme("should update shortcut button click breakdown updates", async ({}) => {
+      //TODO not clear which button I need to press. Need to clarify. Is it in Shortcut Button Clicks section or in diagram.
     });
   });
 
-  test.describe("Negative Test cases", () => {
+  test.describe("Negative test cases", () => {
     //TODO negative test cases can be covered here for Insights page.
   });
 });
