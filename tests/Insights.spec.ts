@@ -14,20 +14,47 @@ test.describe("LearnWise test cases", () => {
     insightsPage = new InsightsPage(page);
     await loginPage.goto();
     await loginPage.login(process.env.EMAIL, process.env.PASSWORD);
+    await basePage.navigateTo("Insights");
   });
 
   test.describe("Postive test cases", () => {
     test("should apply 'Assistants' and 'Escalated' filters", async ({ page }) => {
-      await basePage.navigateTo("Insights");
       await insightsPage.selectEscalationFilter("Escalated");
       await insightsPage.selectAssistantsFilter("Engineering Assistant");
       await expect(insightsPage.filtersApplied("Escalation: Escalated.")).toBeVisible();
       await expect(insightsPage.filtersApplied("Assistants: Engineering Assistant.")).toBeVisible();
     });
-    //TODO cover: Using the “Assistants” and “Escalated” filters
-    //TODO cover Clearing the selected filters
-    //TODO  cover Checking widget data updates
-    //TODO cover Checking shortcut button click breakdown updates
+
+    test("should clear selected filters", async ({ page }) => {
+      await insightsPage.selectEscalationFilter("Escalated");
+      await insightsPage.selectAssistantsFilter("Engineering Assistant");
+      await insightsPage.clearAllFilters();
+      await expect(insightsPage.filtersApplied("Escalation: Escalated.")).toBeHidden();
+      await expect(insightsPage.filtersApplied("Assistants: Engineering Assistant.")).toBeHidden();
+    });
+
+    test("should update widget data when filter is applied", async ({ page }) => {
+      const before = await insightsPage.captureAllMetrics();
+      console.log("Before state:", before);
+
+      await insightsPage.selectEscalationFilter("Escalated");
+
+      const after = await insightsPage.captureAllMetrics();
+      console.log("After state:", after);
+
+      const changedFields = Object.keys(before).filter((key) => before[key as keyof typeof before] !== after[key as keyof typeof after]);
+
+      console.log("Fields that changed:", changedFields);
+
+      expect(changedFields.length).toBeGreaterThan(0); //Fails because no data exist for this user
+    });
+    //TODO
+    test("should update shortcut button click breakdown updates", async ({ page }) => {
+      await basePage.navigateTo("Insights");
+      const initialBreakdown = await insightsPage.shortcutBreakdown.innerText();
+      await insightsPage.selectAssistantsFilter("Engineering Assistant");
+      await expect(insightsPage.shortcutBreakdown).not.toHaveText(initialBreakdown);
+    });
   });
 
   test.describe("Negative Test cases", () => {
