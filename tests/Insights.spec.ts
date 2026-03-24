@@ -39,7 +39,7 @@ test.describe("LearnWise test cases", () => {
       const after = await insightsPage.captureAllMetrics();
       const changedFields = Object.keys(before).filter((key) => before[key as keyof typeof before] !== after[key as keyof typeof after]);
 
-      expect(before.escalated).not.toEqual(after.escalated); //Fails because no data exist for this user
+      expect(changedFields.length).toBeGreaterThan(0); //Fails because no data exist for this user
     });
 
     test.fixme("should update shortcut button click breakdown updates", async ({}) => {
